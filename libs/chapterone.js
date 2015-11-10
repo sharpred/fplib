@@ -20,11 +20,7 @@ truthy = function(x) {
     return false;
 };
 
-falsy = function() {
-};
-
 module.exports = {
     truthy : truthy,
-    falsy : falsy,
     existy : existy
 };

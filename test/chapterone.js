@@ -4,7 +4,6 @@ describe("chapter one", function() {
     describe("all files present and correct", function() {
         it("should find all functions have been exported correctly", function() {
             expect(chapterOneLibs).to.have.a.property("truthy");
-            expect(chapterOneLibs).to.have.a.property("falsy");
             expect(chapterOneLibs).to.have.a.property("existy");
         });
     });
