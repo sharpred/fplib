@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/sharpred/fplib/issues"
   },
-  "homepage": "https://github.com/sharpred/fplib#readme"
+  "homepage": "https://github.com/sharpred/fplib#readme",
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
 }
