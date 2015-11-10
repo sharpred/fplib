@@ -4,7 +4,7 @@
   "description": "functional programming libraries inspired by Functional Javascript by Michael Fogus",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
