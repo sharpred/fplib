@@ -15,7 +15,7 @@ module.exports = function(grunt) {
                 separator : ';',
             },
             dist : {
-                src : ['src/intro.js', 'src/project.js', 'src/outro.js'],
+                src : ['src/chapterone.js', 'src/chaptertwo.js'],
                 dest : 'dist/fplib.js',
             },
         },
