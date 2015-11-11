@@ -10,21 +10,10 @@ module.exports = function(grunt) {
                 jshintrc : '.jshintrc'
             }
         },
-        concat : {
-            options : {
-                separator : ';',
-            },
-            dist : {
-                src : ['src/chapterone.js', 'src/chaptertwo.js'],
-                dest : 'dist/fplib.js',
-            },
-        },
-
         // Before generating any new files, remove any previously-created files.
         clean : {
             tests : ['tmp']
         }
-
     });
 
     // Actually load this plugin's task(s).

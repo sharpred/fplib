@@ -1,18 +1,40 @@
-/**
- * @author paulryan
- */
 var expect = require("chai").expect;
-describe("chapter two", function() {
-    var chapterTwosrc = require("../src/chaptertwo");
+describe("distro", function() {
+    var fplib = require("../dist/app");
     describe("all functions exported", function() {
         it("should find all functions have been exported correctly", function() {
-            expect(chapterTwosrc).to.have.a.property("rename");
-            expect(chapterTwosrc).to.have.a.property("construct");
-            expect(chapterTwosrc).to.have.a.property("cat");
+            expect(fplib).to.have.a.property("truthy");
+            expect(fplib).to.have.a.property("existy");
+            expect(fplib).to.have.a.property("doWhen");
+            expect(fplib).to.have.a.property("cat");
+            expect(fplib).to.have.a.property("construct");
+            expect(fplib).to.have.a.property("rename");
+        });
+    });
+    describe("existy function", function() {
+        var existy = fplib.existy;
+        it("existy should evaluate correctly", function() {
+            expect(existy(null)).to.be.false;
+            expect(existy(undefined)).to.be.false;
+            expect(existy( {}.notHere)).to.be.false;
+            expect(existy(0)).to.be.true;
+            expect(existy(false)).to.be.true;
+        });
+    });
+
+    describe("truthy function", function() {
+        var truthy = fplib.truthy;
+        it("truthy should evaluate correctly", function() {
+            expect(truthy(null)).to.be.false;
+            expect(truthy(undefined)).to.be.false;
+            expect(truthy( {}.notHere)).to.be.false;
+            expect(truthy(0)).to.be.true;
+            expect(truthy({})).to.be.true;
+            expect(truthy(false)).to.be.false;
         });
     });
     describe("rename function", function() {
-        var rename = chapterTwosrc.rename;
+        var rename = fplib.rename;
         var obj = {
             "a" : 1,
             "b" : 2,
@@ -30,7 +52,7 @@ describe("chapter two", function() {
     });
 
     describe("construct function", function() {
-        var construct = chapterTwosrc.construct;
+        var construct = fplib.construct;
         var arr = [1, 2, 3];
         var newarr = construct(42, arr);
         it("construct should work correctly", function() {
@@ -42,7 +64,7 @@ describe("chapter two", function() {
     });
 
     describe("cat function", function() {
-        var cat = chapterTwosrc.cat;
+        var cat = fplib.cat;
         var result1 = cat([1, 2, 3], [4, 5], [6, 7, 8]);
         var result2 = cat([1]);
         var result3 = cat();
