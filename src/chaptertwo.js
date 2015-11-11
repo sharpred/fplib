@@ -16,13 +16,11 @@ cat = function() {
     return [];
 
 };
-
 construct = function(head, tail) {
     return cat([head], _.toArray(tail));
 };
 rename = function(obj, newNames) {
     var memo = construct(obj, _.keys(newNames));
-    console.log("memo " + JSON.stringify(memo));
     return _.reduce(newNames, function(o, nu, old) {
         if (_.has(obj, old)) {
             o[old] = nu;
@@ -31,8 +29,6 @@ rename = function(obj, newNames) {
     }, _.omit.apply(null, memo));
 };
 
-module.exports = {
-    rename : rename,
-    construct : construct,
-    cat : cat
-};
+exports.cat = cat;
+exports.construct = construct;
+exports.rename = rename;

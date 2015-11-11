@@ -30,8 +30,6 @@ doWhen = function(condition, action) {
     return undefined;
 };
 
-module.exports = {
-    truthy : truthy,
-    existy : existy,
-    doWhen : doWhen
-};
+exports.existy = existy;
+exports.truthy = truthy;
+exports.doWhen = doWhen;
