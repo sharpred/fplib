@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var existy,
     truthy,
-    falsy;
+    doWhen;
 
 existy = function(x) {
     /*
@@ -20,7 +20,18 @@ truthy = function(x) {
     return false;
 };
 
+doWhen = function(condition, action) {
+    if (_.isFunction(action)) {
+        if (truthy(condition)) {
+            return action();
+        }
+        return undefined;
+    }
+    return undefined;
+};
+
 module.exports = {
     truthy : truthy,
-    existy : existy
+    existy : existy,
+    doWhen : doWhen
 };
