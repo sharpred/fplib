@@ -5,10 +5,19 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         jshint : {
-            all : ['Gruntfile.js', 'libs/*.js'],
+            all : ['Gruntfile.js', 'src/*.js'],
             options : {
                 jshintrc : '.jshintrc'
             }
+        },
+        concat : {
+            options : {
+                separator : ';',
+            },
+            dist : {
+                src : ['src/intro.js', 'src/project.js', 'src/outro.js'],
+                dest : 'dist/fplib.js',
+            },
         },
 
         // Before generating any new files, remove any previously-created files.

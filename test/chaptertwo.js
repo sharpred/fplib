@@ -3,16 +3,16 @@
  */
 var expect = require("chai").expect;
 describe("chapter two", function() {
-    var chapterTwoLibs = require("../libs/chaptertwo");
+    var chapterTwosrc = require("../src/chaptertwo");
     describe("all functions exported", function() {
         it("should find all functions have been exported correctly", function() {
-            expect(chapterTwoLibs).to.have.a.property("rename");
-            expect(chapterTwoLibs).to.have.a.property("construct");
-            expect(chapterTwoLibs).to.have.a.property("cat");
+            expect(chapterTwosrc).to.have.a.property("rename");
+            expect(chapterTwosrc).to.have.a.property("construct");
+            expect(chapterTwosrc).to.have.a.property("cat");
         });
     });
     describe("rename function", function() {
-        var rename = chapterTwoLibs.rename;
+        var rename = chapterTwosrc.rename;
         var obj = {
             "a" : 1,
             "b" : 2,
@@ -30,7 +30,7 @@ describe("chapter two", function() {
     });
 
     describe("construct function", function() {
-        var construct = chapterTwoLibs.construct;
+        var construct = chapterTwosrc.construct;
         var arr = [1, 2, 3];
         var newarr = construct(42, arr);
         it("construct should work correctly", function() {
@@ -42,7 +42,7 @@ describe("chapter two", function() {
     });
 
     describe("cat function", function() {
-        var cat = chapterTwoLibs.cat;
+        var cat = chapterTwosrc.cat;
         var result1 = cat([1, 2, 3], [4, 5], [6, 7, 8]);
         var result2 = cat([1]);
         var result3 = cat();

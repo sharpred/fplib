@@ -1,15 +1,15 @@
 var expect = require("chai").expect;
 describe("chapter one", function() {
-    var chapterOneLibs = require("../libs/chapterone");
+    var chapterOnesrc = require("../src/chapterone");
     describe("all functions exported", function() {
         it("should find all functions have been exported correctly", function() {
-            expect(chapterOneLibs).to.have.a.property("truthy");
-            expect(chapterOneLibs).to.have.a.property("existy");
-            expect(chapterOneLibs).to.have.a.property("doWhen");
+            expect(chapterOnesrc).to.have.a.property("truthy");
+            expect(chapterOnesrc).to.have.a.property("existy");
+            expect(chapterOnesrc).to.have.a.property("doWhen");
         });
     });
     describe("existy function", function() {
-        var existy = chapterOneLibs.existy;
+        var existy = chapterOnesrc.existy;
         it("existy should evaluate correctly", function() {
             expect(existy(null)).to.be.false;
             expect(existy(undefined)).to.be.false;
@@ -20,7 +20,7 @@ describe("chapter one", function() {
     });
 
     describe("truthy function", function() {
-        var truthy = chapterOneLibs.truthy;
+        var truthy = chapterOnesrc.truthy;
         it("truthy should evaluate correctly", function() {
             expect(truthy(null)).to.be.false;
             expect(truthy(undefined)).to.be.false;
@@ -32,7 +32,7 @@ describe("chapter one", function() {
     });
 
     describe("doWhen function", function() {
-        var doWhen = chapterOneLibs.doWhen;
+        var doWhen = chapterOnesrc.doWhen;
         it("doWhen should evaluate correctly", function() {
             var test1 = true,
                 test2 = false,
