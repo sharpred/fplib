@@ -16,6 +16,8 @@ describe("distro", function() {
             expect(fplib).to.have.a.property("repeatUntil");
             expect(fplib).to.have.a.property("always");
             expect(fplib).to.have.a.property("invoker");
+            expect(fplib).to.have.a.property("fnull");
+            expect(fplib).to.have.a.property("fnullObject");
         });
     });
     describe("existy function", function() {
@@ -192,6 +194,22 @@ describe("distro", function() {
             expect(test1).to.eql([[3, 2, 1]]);
             expect(test2).to.eql([["c", "b", "a"]]);
             expect(objTest.getText()).to.eql("wobble");
+        });
+    });
+
+    describe("fnull function", function() {
+        var nums = [1, 2, 3, null, 5],
+            fnull = fplib.fnull;
+        var totaliser = function(x, y) {
+            return x * y;
+        };
+        var badtest = _.reduce(nums, totaliser);
+        var goodtotaliser = fnull(totaliser, 1, 1);
+        var goodtest = _.reduce(nums, goodtotaliser);
+
+        it("fnull replaces null or undefined arguments with supplied defaults", function() {
+            expect(badtest).to.eql(0);
+            expect(goodtest).to.eql(30);
         });
     });
 });

@@ -5,7 +5,8 @@ var _ = require("underscore"),
     repeatedly,
     repeatUntil,
     always,
-    invoker;
+    invoker,
+    fnull;
 repeatedly = function(times, func) {
     if (_.isNumber(times) && _.isFunction(func)) {
         return _.map(_.range(times), func);
@@ -37,7 +38,7 @@ always = function(value) {
 invoker = function(NAME, METHOD) {
     var targetMethod,
         args;
-   return function(target /* arguments ..... */) {
+    return function(target /* arguments ..... */) {
         var existy = require("./chapterone").existy,
             doWhen = require("./chapterone").doWhen;
         if (existy(target)) {
@@ -53,7 +54,32 @@ invoker = function(NAME, METHOD) {
         }
     };
 };
+fnull = function(fun /*, defaults */) {
+    var defaults = _.rest(arguments);
+    return function(/* arguments */) {
+        var existy = require("./chapterone").existy,
+            args = _.map(arguments, function(e, i) {
+            var val;
+            if (existy(e)) {
+                val = e;
+            } else {
+                val = defaults[i];
+            }
+            return val;
+        });
+        return fun.apply(null, args);
+    };
+};
+fnullObject = function(fun /*, defaults */) {
+    var defaults = _.rest(arguments);
+    if (_.isObject(defaults)) {
+        return function(/* arguments */) {
+        };
+    }
+};
 exports.repeatedly = repeatedly;
 exports.repeatUntil = repeatUntil;
 exports.always = always;
 exports.invoker = invoker;
+exports.fnull = fnull;
+exports.fnullObject = fnullObject;
