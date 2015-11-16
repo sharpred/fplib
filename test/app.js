@@ -9,7 +9,9 @@ describe("app.js", function() {
             expect(fplib).to.have.a.property("existy");
             expect(fplib).to.have.a.property("doWhen");
             expect(fplib).to.have.a.property("cat");
-            expect(fplib).to.have.a.property("construct");
+            expect(fplib).to.have.a.property("car");
+            expect(fplib).to.have.a.property("cdr");
+            expect(fplib).to.have.a.property("cons");
             expect(fplib).to.have.a.property("rename");
             expect(fplib).to.have.a.property("best");
             expect(fplib).to.have.a.property("finder");
@@ -73,15 +75,55 @@ describe("app.js", function() {
         });
     });
 
-    describe("construct function", function() {
-        var construct = fplib.construct;
-        var arr = [1, 2, 3];
-        var newarr = construct(42, arr);
-        it("construct should work correctly", function() {
-            expect(newarr).to.include(1);
-            expect(newarr).to.include(2);
-            expect(newarr).to.include(3);
-            expect(newarr).to.include(42);
+    describe("cons function takes an element (head) and an array (tail) and places the element in the front of the array using cat", function() {
+        var cons = fplib.cons;
+        it("cons adds the head to the front of the tail", function() {
+            expect(cons(42, [1, 2, 3])).to.eql([42, 1, 2, 3]);
+            expect(cons({}, [1, 2, 3])).to.eql([{}, 1, 2, 3]);
+        });
+        it("cons converts the tail to an array if it is not one", function() {
+            expect(cons(42, 7)).to.eql([42, 7]);
+            expect(cons([42], 7)).to.eql([[42], 7]);
+            expect(cons(42, 7, 8, 9, 10)).to.eql([42, 7, 8, 9, 10]);
+            expect(cons(42, {
+                first : 1
+            }, 3)).to.eql([42, {
+                first : 1
+            }, 3]);
+        });
+        it("cons flattens the tail", function() {
+            expect(cons(42, [7, [8, [9, 10]]])).to.eql([42, 7, 8, 9, 10]);
+        });
+        it("cons does not flatten the head", function() {
+            expect(cons([42], 7)).to.eql([[42], 7]);
+        });
+    });
+
+    describe("car function returns the first element of a list of arguments", function() {
+        var car = fplib.car;
+        it("car should return the first item in a list is returned", function() {
+            expect(car(1, 2, 3, 4, 5)).to.eql(1);
+            expect(car([1, 2, 3], 4, [5])).to.eql([1, 2, 3]);
+            expect(car([undefined], 3, [4, 5])).to.eql([undefined]);
+            expect(car(undefined)).to.eql(undefined);
+            expect(car("string")).to.eql('string');
+            expect(car(9)).to.eql(9);
+            expect(car({})).to.eql({});
+        });
+    });
+
+    describe("cdr function returns a list of arguments minus the first element (car)", function() {
+        var cdr = fplib.cdr;
+        it("cdr should return the list of items", function() {
+            expect(cdr(1, 2, 3, 4, 5)).to.eql([2, 3, 4, 5]);
+            expect(cdr([1, 2, 3], 4, [5])).to.eql([4, [5]]);
+            expect(cdr([undefined], 3, [4, 5])).to.eql([3, [4, 5]]);
+        });
+        it("cdr should return an empty array when the list is empty", function() {
+            expect(cdr(undefined)).to.eql([]);
+            expect(cdr("string")).to.eql([]);
+            expect(cdr(9)).to.eql([]);
+            expect(cdr({})).to.eql([]);
         });
     });
 
