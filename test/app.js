@@ -1,9 +1,9 @@
 /*global describe, it */
 var expect = require("chai").expect,
     _ = require("underscore");
-describe("distro", function() {
+describe("app.js", function() {
     var fplib = require("../dist/app");
-    describe("all functions exported", function() {
+    describe("all functions in app.js are exported", function() {
         it("should find all functions have been exported correctly", function() {
             expect(fplib).to.have.a.property("truthy");
             expect(fplib).to.have.a.property("existy");
@@ -19,16 +19,24 @@ describe("distro", function() {
             expect(fplib).to.have.a.property("invoker");
             expect(fplib).to.have.a.property("fnull");
             expect(fplib).to.have.a.property("runWithDefaults");
+            expect(fplib).to.have.a.property("checker");
+            expect(fplib).to.have.a.property("validator");
+            expect(fplib).to.have.a.property("aMap");
+            expect(fplib).to.have.a.property("hasKeys");
         });
     });
-    describe("existy function", function() {
+    describe("existy function provides a loose equality exists function", function() {
         var existy = fplib.existy;
-        it("existy should evaluate correctly", function() {
+        it("existy should returns false for null and undefined", function() {
             expect(existy(null)).to.equal(false);
             expect(existy(undefined)).to.equal(false);
             expect(existy( {}.notHere)).to.equal(false);
+        });
+        it("existy returns true for zero and false", function() {
             expect(existy(0)).to.equal(true);
             expect(existy(false)).to.equal(true);
+        });
+        it("existy returns true for present values", function() {
             expect(existy([[1, 2, 3]])).to.equal(true);
             expect(existy([1, 2, 3])).to.equal(true);
         });
@@ -245,5 +253,102 @@ describe("distro", function() {
             expect(func(testObject)).to.eql("{\"left\":20,\"right\":10,\"top\":5}");
             expect(result).to.eql("{\"left\":20,\"right\":10,\"top\":5,\"bottom\":5,\"layout\":\"vertical\"}");
         });
+    });
+
+    describe("checker function.  Checker takes a number of predicates and returns a validation function.", function() {
+        var checker = fplib.checker,
+            always = fplib.always,
+            fails,
+            alsoFails,
+            alwaysPasses,
+            alwaysFails,
+            test1,
+            test2;
+
+        alwaysPasses = checker(always(true), always(true));
+        test1 = alwaysPasses({});
+
+        fails = always(false);
+        fails.message = "this is a failure";
+        alsoFails = always(false);
+        alsoFails.message = "this fails too";
+        alwaysFails = checker(fails, always(true), alsoFails);
+        test2 = alwaysFails({});
+
+        it("if checker returns true, an empty array is returned", function() {
+            expect(test1).to.eql([]);
+        });
+
+        it("if checker returns false, a populated array of error messages is returned", function() {
+            expect(test2).to.eql(["this is a failure", "this fails too"]);
+        });
+    });
+
+    describe("validator function provides a simple wrapper for adding a message to a validation function", function() {
+        var checker = fplib.checker,
+            always = fplib.always,
+            validator = fplib.validator,
+            gonnaFail;
+
+        gonnaFail = checker(validator("DOH!", always(false)));
+
+        it("checker displays the first parameter passed to validator upon error in an array of error messages", function() {
+            expect(gonnaFail(100)).to.eql(["DOH!"]);
+        });
+
+    });
+
+    describe("aMap is a simple wrapper on _.isObject.  Useful for checker functions", function() {
+        var aMap = fplib.aMap;
+        it("aMap returns true if an object", function() {
+            expect(aMap({})).to.eql(true);
+            expect(aMap({
+                "one" : "two",
+                "three" : undefined
+            })).to.eql(true);
+        });
+        it("aMap also returns true on an array.", function() {
+            expect(aMap([])).to.eql(true);
+            expect(aMap(['fred', 'bert', 'harry'])).to.eql(true);
+        });
+        it("aMap returns false if not an object or an array", function() {
+            expect(aMap()).to.eql(false);
+            expect(aMap(42)).to.eql(false);
+            expect(aMap(null)).to.eql(false);
+            expect(aMap(undefined)).to.eql(false);
+        });
+    });
+
+    describe("hasKeys determines if mandatory keys are present in an object.  Best used in conjunction with checker function", function() {
+        var aMap = fplib.aMap,
+            hasKeys = fplib.hasKeys,
+            validator = fplib.validator,
+            checker = fplib.checker,
+            checkCommand = checker(hasKeys('msg', 'type')),
+            errorMsg = ["Must have values for keys: msg type"];
+        it("hasKeys will report an error on non objects", function() {
+            expect(checkCommand(42)).to.eql(errorMsg);
+            expect(checkCommand(null)).to.eql(errorMsg);
+            expect(checkCommand([])).to.eql(errorMsg);
+            expect(checkCommand({})).to.eql(errorMsg);
+            expect(checkCommand("string")).to.eql(errorMsg);
+            expect(checkCommand(['msg', 'type'])).to.eql(errorMsg);
+            expect(checkCommand({
+                msg : "this is a message"
+            })).to.eql(errorMsg);
+
+        });
+        it("hasKeys will pass on valid objects", function() {
+            expect(checkCommand({
+                "msg": "another",
+                "type" : "test"
+            })).to.eql([]);
+            expect(checkCommand({
+                msg : "this is a message",
+                "type" : "test",
+                value : "wibble"
+            })).to.eql([]);
+        });
+
     });
 });

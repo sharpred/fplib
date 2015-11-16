@@ -7,7 +7,11 @@ var _ = require("underscore"),
     always,
     invoker,
     fnull,
-    runWithDefaults;
+    runWithDefaults,
+    checker,
+    validator,
+    aMap,
+    hasKeys;
 repeatedly = function(times, func) {
     if (_.isNumber(times) && _.isFunction(func)) {
         return _.map(_.range(times), func);
@@ -72,7 +76,8 @@ fnull = function(fun /*, defaults */) {
     };
 };
 runWithDefaults = function(fun /*, defaults */) {
-    var defaults = _.rest(arguments)[0], results;
+    var defaults = _.rest(arguments)[0],
+        results;
     return function(/* arguments */) {
         //we are not mutating the original object - FP best practice
         var args = _.clone(arguments[0]);
@@ -83,9 +88,47 @@ runWithDefaults = function(fun /*, defaults */) {
         return results;
     };
 };
+checker = function(/* validators */) {
+    var validators = _.toArray(arguments);
+    return function(obj) {
+        return _.reduce(validators, function(errs, check) {
+            if (check(obj)) {
+                return errs;
+            } else {
+                return _.chain(errs).push(check.message).value();
+            }
+        }, []);
+    };
+};
+validator = function(message, fun) {
+    var f = function(/* args */) {
+        return fun.apply(fun, arguments);
+    };
+    f["message"] = message;
+    return f;
+};
+aMap = function(obj) {
+    return _.isObject(obj);
+};
+hasKeys = function() {
+    var cat = require("./chaptertwo").cat;
+    var KEYS = _.toArray(arguments);
+    var fun = function(obj) {
+        return _.every(KEYS, function(k) {
+            return _.has(obj, k);
+        });
+    };
+    fun.message = cat(["Must have values for keys:"], KEYS).join(" ");
+    return fun;
+
+};
 exports.repeatedly = repeatedly;
 exports.repeatUntil = repeatUntil;
 exports.always = always;
 exports.invoker = invoker;
 exports.fnull = fnull;
 exports.runWithDefaults = runWithDefaults;
+exports.checker = checker;
+exports.validator = validator;
+exports.aMap = aMap;
+exports.hasKeys = hasKeys;
