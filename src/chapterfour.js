@@ -7,7 +7,7 @@ var _ = require("underscore"),
     always,
     invoker,
     fnull,
-    fnullObject;
+    runWithDefaults;
 repeatedly = function(times, func) {
     if (_.isNumber(times) && _.isFunction(func)) {
         return _.map(_.range(times), func);
@@ -71,7 +71,7 @@ fnull = function(fun /*, defaults */) {
         return fun.apply(null, args);
     };
 };
-fnullObject = function(fun /*, defaults */) {
+runWithDefaults = function(fun /*, defaults */) {
     var defaults = _.rest(arguments)[0], results;
     return function(/* arguments */) {
         //we are not mutating the original object - FP best practice
@@ -88,4 +88,4 @@ exports.repeatUntil = repeatUntil;
 exports.always = always;
 exports.invoker = invoker;
 exports.fnull = fnull;
-exports.fnullObject = fnullObject;
+exports.runWithDefaults = runWithDefaults;

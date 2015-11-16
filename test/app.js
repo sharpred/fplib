@@ -18,7 +18,7 @@ describe("distro", function() {
             expect(fplib).to.have.a.property("always");
             expect(fplib).to.have.a.property("invoker");
             expect(fplib).to.have.a.property("fnull");
-            expect(fplib).to.have.a.property("fnullObject");
+            expect(fplib).to.have.a.property("runWithDefaults");
         });
     });
     describe("existy function", function() {
@@ -214,8 +214,8 @@ describe("distro", function() {
         });
     });
 
-    describe("fnullObject function", function() {
-        var fnullObject = fplib.fnullObject,
+    describe("runWithDefaults function", function() {
+        var runWithDefaults = fplib.runWithDefaults,
             defaults,
             testObject,
             func,
@@ -238,9 +238,9 @@ describe("distro", function() {
             return JSON.stringify(obj);
         };
 
-        newFunc = fnullObject(func, defaults);
+        newFunc = runWithDefaults(func, defaults);
         result = newFunc(testObject);
-        it("fnullObject replaces null or undefined arguments with supplied defaults", function() {
+        it("runWithDefaults replaces null or undefined arguments with supplied defaults", function() {
             expect(func(defaults)).to.eql("{\"left\":10,\"right\":20,\"top\":0,\"bottom\":5,\"layout\":\"vertical\"}");
             expect(func(testObject)).to.eql("{\"left\":20,\"right\":10,\"top\":5}");
             expect(result).to.eql("{\"left\":20,\"right\":10,\"top\":5,\"bottom\":5,\"layout\":\"vertical\"}");
