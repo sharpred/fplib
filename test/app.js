@@ -1,3 +1,4 @@
+/*global describe, it */
 var expect = require("chai").expect,
     _ = require("underscore");
 describe("distro", function() {
@@ -23,25 +24,25 @@ describe("distro", function() {
     describe("existy function", function() {
         var existy = fplib.existy;
         it("existy should evaluate correctly", function() {
-            expect(existy(null)).to.be.false
-            expect(existy(undefined)).to.be.false
-            expect(existy( {}.notHere)).to.be.false
-            expect(existy(0)).to.be.true
-            expect(existy(false)).to.be.true
-            expect(existy([[1, 2, 3]])).to.be.true
-            expect(existy([1, 2, 3])).to.be.true
+            expect(existy(null)).to.equal(false);
+            expect(existy(undefined)).to.equal(false);
+            expect(existy( {}.notHere)).to.equal(false);
+            expect(existy(0)).to.equal(true);
+            expect(existy(false)).to.equal(true);
+            expect(existy([[1, 2, 3]])).to.equal(true);
+            expect(existy([1, 2, 3])).to.equal(true);
         });
     });
 
     describe("truthy function", function() {
         var truthy = fplib.truthy;
         it("truthy should evaluate correctly", function() {
-            expect(truthy(null)).to.be.false
-            expect(truthy(undefined)).to.be.false
-            expect(truthy( {}.notHere)).to.be.false
-            expect(truthy(0)).to.be.true
-            expect(truthy({})).to.be.true
-            expect(truthy(false)).to.be.false
+            expect(truthy(null)).to.equal(false);
+            expect(truthy(undefined)).to.equal(false);
+            expect(truthy( {}.notHere)).to.equal(false);
+            expect(truthy(0)).to.equal(true);
+            expect(truthy({})).to.equal(true);
+            expect(truthy(false)).to.equal(false);
         });
     });
     describe("rename function", function() {
@@ -156,8 +157,8 @@ describe("distro", function() {
         var b = always(function() {
         });
         it("always should return a closure, ALWAYS", function() {
-            expect(a() === a()).to.be.true
-            expect(a() === b()).to.be.false
+            expect(a() === a()).to.equal(true);
+            expect(a() === b()).to.equal(false);
         });
     });
 
@@ -184,7 +185,7 @@ describe("distro", function() {
             this.setText("wobble");
         };
 
-        var objTest = new Obj();
+        objTest = new Obj();
         rev = invoker('reverse', Array.prototype.reverse);
         updater = invoker('update', Obj.prototype.update);
         test1 = _.map([[1, 2, 3]], rev);
@@ -210,6 +211,39 @@ describe("distro", function() {
         it("fnull replaces null or undefined arguments with supplied defaults", function() {
             expect(badtest).to.eql(0);
             expect(goodtest).to.eql(30);
+        });
+    });
+
+    describe("fnullObject function", function() {
+        var fnullObject = fplib.fnullObject,
+            defaults,
+            testObject,
+            func,
+            result,
+            newFunc;
+        defaults = {
+            "left" : 10,
+            "right" : 20,
+            "top" : 0,
+            "bottom" : 5,
+            "layout" : "vertical"
+        };
+        testObject = {
+            "left" : 20,
+            "right" : 10,
+            "top" : 5
+        };
+
+        func = function(obj) {
+            return JSON.stringify(obj);
+        };
+
+        newFunc = fnullObject(func, defaults);
+        result = newFunc(testObject);
+        it("fnullObject replaces null or undefined arguments with supplied defaults", function() {
+            expect(func(defaults)).to.eql("{\"left\":10,\"right\":20,\"top\":0,\"bottom\":5,\"layout\":\"vertical\"}");
+            expect(func(testObject)).to.eql("{\"left\":20,\"right\":10,\"top\":5}");
+            expect(result).to.eql("{\"left\":20,\"right\":10,\"top\":5,\"bottom\":5,\"layout\":\"vertical\"}");
         });
     });
 });
