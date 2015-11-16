@@ -23,6 +23,8 @@ describe("app.js", function() {
             expect(fplib).to.have.a.property("validator");
             expect(fplib).to.have.a.property("aMap");
             expect(fplib).to.have.a.property("hasKeys");
+            expect(fplib).to.have.a.property("hasDeepKeys");
+            expect(fplib).to.have.a.property("getDeepKeys");
         });
     });
     describe("existy function provides a loose equality exists function", function() {
@@ -158,15 +160,21 @@ describe("app.js", function() {
         });
     });
 
-    describe("always function", function() {
+    describe("always function.  Always is analagous to lambda k function", function() {
         var always = fplib.always;
         var a = always(function() {
         });
         var b = always(function() {
         });
-        it("always should return a closure, ALWAYS", function() {
+        var c = always(false);
+        var d = always(true);
+        var e = always("fred");
+        it("always should return a closure.", function() {
             expect(a() === a()).to.equal(true);
             expect(a() === b()).to.equal(false);
+            expect(c()).to.equal(false);
+            expect(d()).to.equal(true);
+            expect(e()).to.equal('fred');
         });
     });
 
@@ -340,7 +348,7 @@ describe("app.js", function() {
         });
         it("hasKeys will pass on valid objects", function() {
             expect(checkCommand({
-                "msg": "another",
+                "msg" : "another",
                 "type" : "test"
             })).to.eql([]);
             expect(checkCommand({

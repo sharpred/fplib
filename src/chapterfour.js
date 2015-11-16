@@ -122,6 +122,42 @@ hasKeys = function() {
     return fun;
 
 };
+function deep(obj, str) {
+    "use strict";
+    if ( typeof str !== "string") {
+        return;
+    }
+    if ( typeof obj !== "object") {
+        return;
+    }
+    function index(obj, i) {
+        try {
+            if (obj.hasOwnProperty(i)) {
+                return obj[i];
+            }
+            return;
+        } catch(ex) {
+            return;
+        }
+    }
+
+    return str.split('.').reduce(index, obj);
+}
+
+function hasDeepKeys(target, path) {
+    var test = deep(target, path);
+    if ( typeof test !== "undefined") {
+        return true;
+    }
+    return false;
+}
+
+function getDeepKeys(target, path) {
+    return deep(target, path);
+}
+
+exports.hasDeepKeys = hasDeepKeys;
+exports.getDeepKeys = getDeepKeys;
 exports.repeatedly = repeatedly;
 exports.repeatUntil = repeatUntil;
 exports.always = always;
