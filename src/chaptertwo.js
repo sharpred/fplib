@@ -15,14 +15,25 @@ var _ = require("underscore"),
 cat = function() {
     var head = _.first(arguments),
         rest = _.rest(arguments);
+    //console.log(rest);
     if (existy(head) && existy(rest)) {
         return head.concat.apply(head, rest);
     }
     return [];
 
 };
-cons = function(head /* tail */) {
-    var tail = _.chain(arguments).rest().flatten().value();
+cons = function(head) {
+    var tail = _.rest(arguments);
+    //console.log("*** cons");
+    if (!tail.length) {
+        tail = [tail];
+    } else {
+        //if tail is just a single array, shallowly flatten it temporarily
+        //this will make cons(42, [1,2,3]) into [42,1,2,3]
+        if (_.isArray(tail)) {
+            tail = _.flatten(tail, true);
+        }
+    }
     return cat([head], _.toArray(tail));
 };
 

@@ -91,8 +91,8 @@ describe("app.js", function() {
                 first : 1
             }, 3]);
         });
-        it("cons flattens the tail", function() {
-            expect(cons(42, [7, [8, [9, 10]]])).to.eql([42, 7, 8, 9, 10]);
+        it("cons does not flattens the tail", function() {
+            expect(cons(42, [7, [8, [9, 10]]])).to.eql([42, 7, [8, [9, 10]]]);
         });
         it("cons does not flatten the head", function() {
             expect(cons([42], 7)).to.eql([[42], 7]);
