@@ -38,12 +38,37 @@ cons = function(head) {
 };
 
 cdr = function(/* arguments */) {
-    var tail = _.rest(arguments);
+    var head = _.first(arguments);
+    var tail = _.rest(arguments) || [];
+    if (_.isEmpty(head) && _.isEmpty(tail)) {
+        tail = [];
+    } else if (head && _.isEmpty(tail)) {
+        if (!_.isString(head)) {
+            if (_.isArray(head)) {
+                head = _.flatten(head, true);
+                tail = _.rest(head);
+            }
+        } else {
+            tail = [];
+        }
+    }
     return tail;
 };
 
 car = function(/* arguments */) {
-    return _.first(arguments);
+    var head = _.first(arguments);
+    var tail = _.rest(arguments);
+    if (!_.isEmpty(tail)) {
+        console.log("tail");
+        console.log(tail);
+        return head;
+    } else {
+        if (!_.isString(head) && _.first(head)) {
+            return _.first(head);
+        } else {
+            return null;
+        }
+    }
 };
 rename = function(obj, newNames) {
     var memo = cons(obj, _.keys(newNames));

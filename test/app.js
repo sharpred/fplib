@@ -1,4 +1,4 @@
-/*global describe, it */
+/*global describe, it, xit */
 var expect = require("chai").expect,
     _ = require("underscore");
 describe("app.js", function() {
@@ -103,27 +103,64 @@ describe("app.js", function() {
         var car = fplib.car;
         it("car should return the first item in a list is returned", function() {
             expect(car(1, 2, 3, 4, 5)).to.eql(1);
-            expect(car([1, 2, 3], 4, [5])).to.eql([1, 2, 3]);
+            expect(car(["string"])).to.eql("string");
+            expect(car([9])).to.eql(9);
+            expect(car([{}])).to.eql({});
+            expect(car("string", 8, {}, null)).to.equal("string");
+            expect(car(["string", 8, {}, null])).to.equal("string");
+        });
+        it("car should incrementally return first item in a list", function() {
+            var test1 = car([[1, 2], 3], 4, [5]),
+                test2 = car(test1),
+                test3 = car(test2),
+                test4 = car(test3);
+            expect(test1).to.eql([[1, 2], 3]);
+            expect(test2).to.eql([1, 2]);
+            expect(test3).to.eql(1);
+            expect(test4).to.eql(null);
+        });
+        it("car should return null if list is not an array", function() {
             expect(car([undefined], 3, [4, 5])).to.eql([undefined]);
-            expect(car(undefined)).to.eql(undefined);
-            expect(car("string")).to.eql('string');
-            expect(car(9)).to.eql(9);
-            expect(car({})).to.eql({});
+            expect(car(undefined)).to.eql(null);
+            expect(car("string")).to.eql(null);
+            expect(car(9)).to.eql(null);
+            expect(car({})).to.eql(null);
         });
     });
 
     describe("cdr function returns a list of arguments minus the first element (car)", function() {
-        var cdr = fplib.cdr;
+        var cdr = fplib.cdr,
+            test1,
+            test2,
+            test3,
+            test4;
+        test1 = cdr([undefined], 3, [4, 5]);
+        test2 = cdr(test1);
+        test3 = cdr(test2);
+        test4 = cdr(test3);
         it("cdr should return the list of items", function() {
             expect(cdr(1, 2, 3, 4, 5)).to.eql([2, 3, 4, 5]);
             expect(cdr([1, 2, 3], 4, [5])).to.eql([4, [5]]);
             expect(cdr([undefined], 3, [4, 5])).to.eql([3, [4, 5]]);
         });
-        it("cdr should return an empty array when the list is empty", function() {
+        it("cdr should return an empty array when the list is undefined", function() {
             expect(cdr(undefined)).to.eql([]);
+            expect(cdr(null)).to.eql([]);
+            expect(cdr([])).to.eql([]);
+        });
+        it("cdr should return an empty array when the list is empty", function() {
             expect(cdr("string")).to.eql([]);
+            expect(cdr(["string"])).to.eql([]);
             expect(cdr(9)).to.eql([]);
             expect(cdr({})).to.eql([]);
+            expect(cdr([9])).to.eql([]);
+            expect(cdr([{}])).to.eql([]);
+        });
+        it("cdr should cope with nested calls", function() {
+            expect(test1).to.eql([3, [4, 5]]);
+            expect(test2).to.eql([4, 5]);
+            expect(test3).to.eql([5]);
+            expect(test4).to.eql([]);
         });
     });
 
