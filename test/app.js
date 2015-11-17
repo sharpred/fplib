@@ -8,6 +8,8 @@ describe("app.js", function() {
             expect(fplib).to.have.a.property("truthy");
             expect(fplib).to.have.a.property("existy");
             expect(fplib).to.have.a.property("doWhen");
+            expect(fplib).to.have.a.property("splat");
+            expect(fplib).to.have.a.property("unsplat");
             expect(fplib).to.have.a.property("cat");
             expect(fplib).to.have.a.property("car");
             expect(fplib).to.have.a.property("cdr");
@@ -72,6 +74,40 @@ describe("app.js", function() {
         it("rename should work correctly", function() {
             expect(obj2["a"]).to.equal("AAA");
             expect(obj2["c"]).to.equal("ccc");
+        });
+    });
+
+    describe("splat takes a function and returns another function that takes an array and calls the original function with apply", function() {
+        var splat = fplib.splat,
+            addArrayElements,
+            func;
+        func = function(x, y) {
+            return x + y;
+        };
+        addArrayElements = splat(func);
+        it("func should work correctly", function() {
+            expect(func(1,2)).to.eql(3);
+        });
+        it("splat should work correctly", function() {
+            expect(addArrayElements([1, 2])).to.eql(3);
+        });
+    });
+
+    describe("unsplat takes a function and returns another function that takes any number of arguments, converts them to an array and calls the original function with an array of the values given", function() {
+        var unsplat = fplib.unsplat,
+            func,
+            joinElements;
+        func = function(array) {
+            return array.join(' ');
+        };
+        joinElements = unsplat(func);
+        it("func should work correctly", function() {
+            expect(func([1, 2])).to.eql("1 2");
+            expect(func(["-", "$", "/", "!", ":"])).to.eql("- $ / ! :");
+        });
+        it("unsplat should work correctly", function() {
+            expect(joinElements(1,2)).to.eql("1 2");
+            expect(joinElements("-", "$", "/", "!", ":")).to.eql("- $ / ! :");
         });
     });
 

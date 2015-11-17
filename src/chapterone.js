@@ -1,7 +1,9 @@
 var _ = require("underscore");
 var existy,
     truthy,
-    doWhen;
+    doWhen,
+    splat,
+    unsplat;
 
 existy = function(x) {
     /*
@@ -30,6 +32,21 @@ doWhen = function(condition, action) {
     return undefined;
 };
 
+splat = function(fun) {
+    return function(array) {
+        return fun.apply(null, array);
+    };
+};
+
+unsplat = function(fun) {
+    return function(/* arguments */) {
+        return fun.call(null, _.toArray(arguments));
+    };
+
+};
+
 exports.existy = existy;
 exports.truthy = truthy;
 exports.doWhen = doWhen;
+exports.splat = splat;
+exports.unsplat = unsplat;
