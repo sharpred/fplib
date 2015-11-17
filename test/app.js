@@ -86,7 +86,7 @@ describe("app.js", function() {
         };
         addArrayElements = splat(func);
         it("func should work correctly", function() {
-            expect(func(1,2)).to.eql(3);
+            expect(func(1, 2)).to.eql(3);
         });
         it("splat should work correctly", function() {
             expect(addArrayElements([1, 2])).to.eql(3);
@@ -106,7 +106,7 @@ describe("app.js", function() {
             expect(func(["-", "$", "/", "!", ":"])).to.eql("- $ / ! :");
         });
         it("unsplat should work correctly", function() {
-            expect(joinElements(1,2)).to.eql("1 2");
+            expect(joinElements(1, 2)).to.eql("1 2");
             expect(joinElements("-", "$", "/", "!", ":")).to.eql("- $ / ! :");
         });
     });
@@ -144,6 +144,9 @@ describe("app.js", function() {
             expect(car([{}])).to.eql({});
             expect(car("string", 8, {}, null)).to.equal("string");
             expect(car(["string", 8, {}, null])).to.equal("string");
+            expect(car([undefined], 3, [4, 5])).to.eql([undefined]);
+            expect(car(undefined, 3, [4, 5])).to.eql(undefined);
+            expect(car(null, 3, [4, 5])).to.eql(null);
         });
         it("car should incrementally return first item in a list", function() {
             var test1 = car([[1, 2], 3], 4, [5]),
@@ -156,7 +159,6 @@ describe("app.js", function() {
             expect(test4).to.eql(null);
         });
         it("car should return null if list is not an array", function() {
-            expect(car([undefined], 3, [4, 5])).to.eql([undefined]);
             expect(car(undefined)).to.eql(null);
             expect(car("string")).to.eql(null);
             expect(car(9)).to.eql(null);
@@ -271,6 +273,8 @@ describe("app.js", function() {
 
         it("repeatUntil should carry on until check function returns true", function() {
             expect(test1).to.eql([2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]);
+        });
+        it("repeatUntil should return an empty array on error state", function() {
             expect(test2).to.eql([]);
         });
     });

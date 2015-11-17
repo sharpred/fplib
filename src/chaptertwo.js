@@ -59,8 +59,6 @@ car = function(/* arguments */) {
     var head = _.first(arguments);
     var tail = _.rest(arguments);
     if (!_.isEmpty(tail)) {
-        console.log("tail");
-        console.log(tail);
         return head;
     } else {
         if (!_.isString(head) && _.first(head)) {
